@@ -99,7 +99,7 @@ const [category,setcategory]=useState([]);
       <div class="col-12">
           <label for="category" className="form-lable  mb-3">Category</label>
           <select className='form-select' id='category' name='category'
-            onChange={e => setcategory(e.target.value)}>
+            onChange={e => setBankName(e.target.value)}>
             {
               category.map(c => {
                 return <option key={c.bankName} value={c.bankName}>{c.bankName}</option>

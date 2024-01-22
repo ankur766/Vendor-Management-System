@@ -85,7 +85,7 @@ export default function AddEmployee() {
             onChange={e => setBankName(e.target.value)}>
             {
               category.map(c => {
-                return <option key={c.bank_Name} value={c.bank_Name}>{c.bank_Name}</option>
+                return <option key={c.bank_Name} value={c.bankName}>{c.bankName}</option>
               })
             }
           </select>
