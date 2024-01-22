@@ -128,7 +128,7 @@ export default function Employee() {
   return (
     <div className=''>
     <div className=' mt-1 d-flex vendercss  '><h2>Vender Data</h2></div>
-    <Link to="/dashboard/add_employee d-flex " className='btn btn-success mx-3'>Add Vender</Link>
+    <Link to="/dashboard/add_employee " className='btn btn-success mx-3'>Add Vender</Link>
     
 
     <div className='mt-1 d-flex datagriddiv ' >

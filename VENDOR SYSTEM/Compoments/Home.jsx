@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Table from 'react-bootstrap/Table';
-import './CSS/Home.css'
-
-
-
+import './CSS/Home.css';
 
 import Main from './pointGraph/main';
 

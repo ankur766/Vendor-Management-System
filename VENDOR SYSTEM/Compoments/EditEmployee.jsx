@@ -20,17 +20,17 @@ const [country, setCountry] = useState();
 const [zipCode, setZipCode] = useState();
 
 
-const [category,setBankNames]=useState([]);
+const [category,setcategory]=useState([]);
    
     
     const navigate = useNavigate();
 
     useEffect(()=>
   {
-    axios.get('https://65a396d3a54d8e805ed3bf5a.mockapi.io/category')
+    axios.get('http://localhost:3001/getAllBanks')
       .then(result=>{
         console.log(result.data)
-        setBankNames(result.data)
+        setcategory(result.data)
 
       })
     
@@ -74,7 +74,7 @@ const [category,setBankNames]=useState([]);
           .then(() => {
 
            
-            navigate("/dashboard/employee");
+            navigate('/dashboard/employee');
           })
       }
    
@@ -97,15 +97,15 @@ const [category,setBankNames]=useState([]);
         />
       </div>
       <div class="col-12">
-        <label for="category" className="form-lable  mb-3">BankName</label>
-        <select className='form-select' id='category' name='category'
-        onChange={e => setBankName(e.target.value)}>
-          {
-            category.map(c=>(
-              <option  key={c.bank_Name} value={c.bank_Name}>{c.bank_Name}</option>
-            ))
-          }
-        </select>
+          <label for="category" className="form-lable  mb-3">Category</label>
+          <select className='form-select' id='category' name='category'
+            onChange={e => setcategory(e.target.value)}>
+            {
+              category.map(c => {
+                return <option key={c.bankName} value={c.bankName}>{c.bankName}</option>
+              })
+            }
+          </select>
         
         
       </div>
