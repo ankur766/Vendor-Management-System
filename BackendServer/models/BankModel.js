@@ -8,6 +8,7 @@
 
     bankName: { type: String, required: true },
     emergencyContactNo: { type: String },
+    email: { type: String },
 
     
   });

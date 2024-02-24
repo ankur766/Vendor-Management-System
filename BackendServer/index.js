@@ -113,6 +113,7 @@ app.post("/createBank", async (req, res) => {
       const bank = await BankModel.create(req.body);
       console.log(`Bank entry with ID ${bank.bankID} created successfully`);
       res.json(bank);
+      
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

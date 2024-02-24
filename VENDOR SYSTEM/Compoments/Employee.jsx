@@ -90,7 +90,7 @@ export default function Employee() {
 
   useEffect(()=>
   {
-    axios.get('http://localhost:3001/users')
+    axios.get('https://vendor-management-system-2.onrender.com/users')
       .then(result=>{
         console.log(result.data)
         setEmployee(result.data)
@@ -99,7 +99,7 @@ export default function Employee() {
     
   },[])
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/users/${id}`)
+    axios.delete(`https://vendor-management-system-2.onrender.com/users/${id}`)
       .then(response => {
         if (response.status === 200) {
           console.log("Success: Employee deleted");

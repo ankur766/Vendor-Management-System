@@ -8,7 +8,7 @@ export default function Profile() {
   
   useEffect(()=>
   {
-    axios.get('http://localhost:3001/users/')
+    axios.get('https://vendor-management-system-2.onrender.com/users/')
       .then(result=>{
         console.log(result.data)
         setEmployee(result.data)

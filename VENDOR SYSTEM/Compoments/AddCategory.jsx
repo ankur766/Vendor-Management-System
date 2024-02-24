@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 export default function AddCategory() {
     const [ Bankname,setBankName]=useState('');
     const [ EmergencyContactNo,setemergencyContactNo]=useState('');
+    const [email,setEmail]=useState('');
     const  navigate=useNavigate()
+    console.log(email)
     
 
     const handelesubmit=(e)=>{
@@ -14,8 +16,9 @@ export default function AddCategory() {
       };
         e.preventDefault();
 
-        axios.post('http://localhost:3001/createBank', {bankName:Bankname,
-        emergencyContactNo:EmergencyContactNo
+        axios.post('https://vendor-management-system-2.onrender.com/createBank', {bankName:Bankname,
+        emergencyContactNo:EmergencyContactNo,
+        email:email
       
       }
 
@@ -46,6 +49,10 @@ export default function AddCategory() {
             <div className='mb-3'>
               <label htmlFor='category'><strong>EmergencyContactNo</strong></label>
               <input type='text' name='text' value={EmergencyContactNo} autoComplete='off' placeholder='BankName' className='form-control rounded-0' onChange={(e) =>setemergencyContactNo(e.target.value) } />
+            </div>
+            <div className='mb-3'>
+              <label htmlFor='email'><strong>Email</strong></label>
+              <input type='text' name='text' value={email} autoComplete='off' placeholder='email' className='form-control rounded-0' onChange={(e) =>setEmail(e.target.value) } />
             </div>
 
         

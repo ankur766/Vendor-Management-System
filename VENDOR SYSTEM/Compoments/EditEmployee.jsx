@@ -27,7 +27,7 @@ const [category,setcategory]=useState([]);
 
     useEffect(()=>
   {
-    axios.get('http://localhost:3001/getAllBanks')
+    axios.get('https://vendor-management-system-2.onrender.com/getAllBanks')
       .then(result=>{
         console.log(result.data)
         setcategory(result.data)
@@ -37,7 +37,7 @@ const [category,setcategory]=useState([]);
   },[])
   
    useEffect(()=> {
-		axios.get(`http://localhost:3001/users/${id}`)
+		axios.get(`https://vendor-management-system-2.onrender.com/users/${id}`)
 		.then(res => {
             console.log(res.data)
           setVendorName(res.data.vendor_name)
@@ -60,7 +60,7 @@ const [category,setcategory]=useState([]);
         e.preventDefault();
         console.log("success");
     
-        await axios.put(`http://localhost:3001/users/${id}`, {
+        await axios.put(`https://vendor-management-system-2.onrender.com/users/${id}`, {
           vendor_name:vendorName,
           bank_account_no:bankAccountNo,
           bank_name:bankName,

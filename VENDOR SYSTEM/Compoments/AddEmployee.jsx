@@ -17,7 +17,7 @@ export default function AddEmployee() {
 
   const navigate = useNavigate()
   useEffect(() => {
-    axios.get('http://localhost:3001/getAllBanks')
+    axios.get('https://vendor-management-system-2.onrender.com/getAllBanks')
       .then(result => {
         console.log(result.data)
         setcategory(result.data)
@@ -34,7 +34,7 @@ export default function AddEmployee() {
     };
   
   axios
-    .post('http://localhost:3001/createUser', {
+    .post('https://vendor-management-system-2.onrender.com/createUser', {
       vendor_name:vendorName,
       bank_account_no:bankAccountNo,
       bank_name:bankName,

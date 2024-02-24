@@ -10,7 +10,7 @@ export default function Category() {
 
   useEffect(()=>
   {
-    axios.get('http://localhost:3001/getAllBanks')
+    axios.get('https://vendor-management-system-2.onrender.com/getAllBanks')
 
       .then(result=>{
         console.log(result)
@@ -28,7 +28,7 @@ export default function Category() {
     { field: 'id', headerName: 'ID', width: 100 , headerClassName: 'header-bold'},
     { field: 'nameofBank', headerName: 'Name of Bank', width: 200 ,headerClassName: 'header-bold'},
     { field: 'emergencyContactNo', headerName: 'Emergency Contact No', width: 200 ,headerClassName: 'header-bold'},
-     
+    { field: 'email', headerName: 'Email', width: 200 ,headerClassName: 'header-bold'},
   ];
 
 
