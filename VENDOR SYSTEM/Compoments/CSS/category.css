@@ -18,12 +18,12 @@ html,body{
 
 .custom-data-grid .MuiDataGrid-cell,.MuiDataGrid-sortIcon,.MuiDataGrid-menuIconButton{
   color: white !important;
-  fontWeight: 700,
+  font-Weight: 700,
 }
 
  .custom-data-grid .MuiDataGrid-checkboxInput {
   color: white !important;
-  fontWeight: 700,
+  font-weight: 700,
 }
 
 .custom-data-grid .MuiDataGrid-pagination {
