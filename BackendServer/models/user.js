@@ -15,6 +15,10 @@ const UserSchema=new mongoose.Schema({
     city: String,
     country: String,
     zip_code: { type: String},
+    phone_no: { type: String, unique: true },
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+
       })
       const userModel= mongoose.model("vendor",UserSchema)
       module.exports=userModel
