@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import Chart from "react-apexcharts";
 import axios from "axios";
-import './main.css';
+import { Grid, Paper, styled, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { saveAs } from "file-saver";
 
 // Utility functions to calculate mean, mode, median
 const calculateMean = (data) => {
@@ -21,7 +22,7 @@ const calculateMode = (data) => {
   const frequency = {};
   let maxFreq = 0;
   let mode = [];
-  data.forEach(value => {
+  data.forEach((value) => {
     frequency[value] = (frequency[value] || 0) + 1;
     if (frequency[value] > maxFreq) {
       maxFreq = frequency[value];
@@ -33,269 +34,245 @@ const calculateMode = (data) => {
   return mode;
 };
 
+// Styled component for bold text with additional CSS
+const BoldCell = styled("div")({
+  color: "#fff",
+  "&:hover": {
+    boxShadow: "2px 2px 10px #ccc", // Hover box shadow
+  },
+});
+
+// Animated delay class
+const AnimatedDelay = styled("div")({
+  animation: "fadeIn 1s forwards",
+  opacity: 0,
+  animationDelay: "0.5s",
+  "@keyframes fadeIn": {
+    "0%": {
+      opacity: 0,
+    },
+    "100%": {
+      opacity: 1,
+    },
+  },
+});
+
 class Main extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      optionsMixedChart: {
-        chart: {
-          id: "basic-bar",
-          toolbar: {
-            show: false
-          }
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: "50%"
-          }
-        },
-        stroke: {
-          width: [4, 0, 0]
-        },
-        xaxis: {
-          categories: []
-        },
-        markers: {
-          size: 6,
-          strokeWidth: 3,
-          fillOpacity: 0,
-          strokeOpacity: 0,
-          hover: {
-            size: 8
-          }
-        },
-        yaxis: {
-          tickAmount: 5,
-          min: 0,
-          max: 100
-        }
+      statistics: {
+        sum: 0,
+        mean: 0,
+        total: 0,
+        mode: [],
+        median: 0,
       },
-      seriesMixedChart: [],
-      optionsRadial: {
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 225,
-            hollow: {
-              margin: 0,
-              size: "70%",
-              background: "#fff",
-              image: undefined,
-              imageOffsetX: 0,
-              imageOffsetY: 0,
-              position: "front",
-              dropShadow: {
-                enabled: true,
-                top: 3,
-                left: 0,
-                blur: 4,
-                opacity: 0.24
-              }
-            },
-            track: {
-              background: "#fff",
-              strokeWidth: "67%",
-              margin: 0, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: -3,
-                left: 0,
-                blur: 4,
-                opacity: 0.35
-              }
-            },
-            dataLabels: {
-              showOn: "always",
-              name: {
-                offsetY: -20,
-                show: true,
-                color: "#888",
-                fontSize: "13px"
-              },
-              value: {
-                formatter: function (val) {
-                  return val;
-                },
-                color: "#111",
-                fontSize: "30px",
-                show: true
-              }
-            }
-          }
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            type: "horizontal",
-            shadeIntensity: 0.5,
-            gradientToColors: ["#ABE5A1"],
-            inverseColors: true,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 100]
-          }
-        },
-        stroke: {
-          lineCap: "round"
-        },
-        labels: ["Percent"]
-      },
-      seriesRadial: [],
-      optionsBar: {
-        chart: {
-          stacked: true,
-          stackType: "100%",
-          toolbar: {
-            show: false
-          }
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true
-          }
-        },
-        dataLabels: {
-          dropShadow: {
-            enabled: true
-          }
-        },
-        stroke: {
-          width: 0
-        },
-        xaxis: {
-          categories: ["Statistics"],
-          labels: {
-            show: false
-          },
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false
-          }
-        },
-        fill: {
-          opacity: 1,
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            type: "vertical",
-            shadeIntensity: 0.35,
-            gradientToColors: undefined,
-            inverseColors: false,
-            opacityFrom: 0.85,
-            opacityTo: 0.85,
-            stops: [90, 0, 100]
-          }
-        },
-
-        legend: {
-          position: "bottom",
-          horizontalAlign: "right"
-        }
-      },
-      seriesBar: []
+      loading: true, // State for loading indicator
     };
   }
 
   componentDidMount() {
     this.fetchData();
-    this.interval = setInterval(this.updateCharts, 1000);
+    this.interval = setInterval(this.fetchData, 10000); // Update data every 10 seconds
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  fetchData() {
-    axios.get('https://vendobackend-2.onrender.com/users')
-      .then(result => {
-        const salaries = result.data.map(user => user.salary);
+  fetchData = () => {
+    axios
+      .get("https://vendobackend-2.onrender.com/users")
+      .then((result) => {
+        const salaries = result.data.map((user) => user.salary);
         const sum = salaries.reduce((a, b) => a + b, 0);
         const mean = calculateMean(salaries);
         const median = calculateMedian(salaries);
         const mode = calculateMode(salaries);
-        const seriesMixedChart = [
-          {
-            name: "Salary",
-            type: "line",
-            data: salaries
-          }
-        ];
-        const seriesRadial = [mean];
-        const seriesBar = [
-          {
-            name: "Sum",
-            data: [sum]
-          },
-          {
-            name: "Mean",
-            data: [mean]
-          },
-          {
-            name: "Median",
-            data: [median]
-          },
-          {
-            name: "Mode",
-            data: [mode[0]] // Taking the first mode if there are multiple
-          }
-        ];
+
+        // Assuming 'total' is the total number of users
+        const total = result.data.length;
 
         this.setState({
-          seriesMixedChart,
-          seriesRadial,
-          seriesBar,
-          optionsMixedChart: {
-            ...this.state.optionsMixedChart,
-            xaxis: {
-              categories: result.data.map(user => new Date(user.created_at).toLocaleDateString())
-            }
-          }
+          statistics: {
+            sum: sum,
+            mean: mean,
+            total: total,
+            mode: mode,
+            median: median,
+          },
+          loading: false, // Update loading state when data is fetched
         });
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }
 
-  updateCharts() {
-    // For this example, we'll just re-fetch the data
-    this.fetchData();
-  }
+        // Update Google Sheets
+        this.updateGoogleSheets(sum, mean, total, mode.join(", "), median);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        this.setState({ loading: false }); // Update loading state in case of error
+      });
+  };
+
+  updateGoogleSheets = (sum, mean, total, mode, median) => {
+    // Example of how to use Axios to post data to Google Sheets API
+    // Replace with your actual endpoint and sheet ID
+    const endpoint = "YOUR_GOOGLE_SHEETS_ENDPOINT";
+    const sheetId = "YOUR_GOOGLE_SHEET_ID";
+    const accessToken = "YOUR_GOOGLE_ACCESS_TOKEN";
+
+    const rowData = {
+      datetime: new Date().toLocaleString(),
+      total: total,
+      sum: sum,
+      mean: mean,
+      mode: mode,
+      median: median,
+    };
+
+    axios
+      .post(
+        `${endpoint}/values/Sheet1!A1:append?valueInputOption=USER_ENTERED&access_token=${accessToken}`,
+        {
+          values: [[
+            rowData.datetime,
+            rowData.total,
+            rowData.sum,
+            rowData.mean,
+            rowData.mode,
+            rowData.median,
+          ]],
+        }
+      )
+      .then((response) => {
+        console.log("Successfully updated Google Sheets:", response);
+      })
+      .catch((error) => {
+        console.error("Error updating Google Sheets:", error);
+      });
+  };
+
+  handleDownloadExcel = () => {
+    const { statistics } = this.state;
+    const fileName = `statistics_${new Date().toLocaleString().replace(/[\/, :]/g, '-')}.xlsx`;
+
+    // Example using exceljs to generate Excel file
+    const ExcelJS = require('exceljs');
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Statistics');
+
+    worksheet.columns = [
+      { header: 'DateTime', key: 'datetime', width: 25 },
+      { header: 'Total', key: 'total', width: 15 },
+      { header: 'Sum', key: 'sum', width: 15 },
+      { header: 'Mean', key: 'mean', width: 15 },
+      { header: 'Mode', key: 'mode', width: 25 },
+      { header: 'Median', key: 'median', width: 15 }
+    ];
+
+    const data = [
+      {
+        datetime: new Date().toLocaleString(),
+        total: statistics.total,
+        sum: statistics.sum,
+        mean: statistics.mean,
+        mode: statistics.mode.join(", "),
+        median: statistics.median
+      }
+    ];
+
+    data.forEach((row) => {
+      worksheet.addRow(row);
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, fileName);
+    });
+  };
 
   render() {
+    const { statistics, loading } = this.state;
+
+    const rows = [
+      { id: 1, statistic: "Total Emp.", value: statistics.total },
+      { id: 2, statistic: "Sum", value: statistics.sum },
+      { id: 3, statistic: "Mean", value: statistics.mean },
+      { id: 4, statistic: "Mode", value: statistics.mode.join(", ") },
+      { id: 5, statistic: "Median", value: statistics.median },
+    ];
+
+    const columns = [
+      {
+        field: "statistic",
+        headerName: "Statistic",
+        width: 150,
+        renderCell: (params) => (
+          <AnimatedDelay>
+            <BoldCell>{params.value}</BoldCell>
+          </AnimatedDelay>
+        ),
+        headerClassName: "bold-header", // Add class for header to make it bold
+      },
+      {
+        field: "value",
+        headerName: "Value",
+        width: 150,
+        renderCell: (params) => (
+          <AnimatedDelay>
+            <div>{params.value}</div>
+          </AnimatedDelay>
+        ),
+      },
+    ];
+
     return (
-      <div className="app maingrap" style={{ color: 'white' }}>
-        <div className="row">
-          <div className="col mixed-chart">
-            <Chart
-              options={this.state.optionsMixedChart}
-              series={this.state.seriesMixedChart}
-              type="line"
-              width="1000"
-              height="280"
-            />
+      <Grid container spacing={3} style={{ color: "#fff" }}>
+        <Grid item xs={12} sm={6}>
+          <div className="px-5 mt-3">
+            <div className="justify-content-center">
+              <h2>Statistics</h2>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={this.handleDownloadExcel}
+              >
+                Download Excel
+              </Button>
+            </div>
+            <div className="mt-3">
+              <Paper
+                style={{
+                  height: 400,
+                  width: "100%",
+                  backgroundColor: "#000", // Black background color
+                  color: "#fff", // White text color
+                }}
+              >
+                {loading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <DataGrid
+                    style={{
+                      color: "#fff", // White text color
+                   
+ // White text color
+                    }}
+                    rows={rows}
+                    columns={columns}
+                    checkboxSelection
+                    autoHeight // Adjust height automatically
+                  />
+                )}
+              </Paper>
+            </div>
           </div>
-          <div className="col radial-chart ">
-            <Chart className='chart'
-              options={this.state.optionsRadial}
-              series={this.state.seriesRadial}
-              type="radialBar"
-              width="280"
-            />
-          </div>
-          <div className="col percentage-chart ">
-            <Chart className='chart'
-              options={this.state.optionsBar}
-              height={140}
-              series={this.state.seriesBar}
-              type="bar"
-              width={500}
-            />
-          </div>
-        </div>
-      </div>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          {/* Add your chart components here */}
+        </Grid>
+      </Grid>
     );
   }
 }

@@ -40,7 +40,7 @@ export default function AddEmployee() {
       bank_account_no:bankAccountNo,
       bank_name:bankName,
       vendor_email:bankEmail,
-      vendor_salry:salary,
+      salary:salary,
       address_line1:addressLine1,
       address_line2:addressLine2,
       city:city,
