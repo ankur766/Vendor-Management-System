@@ -16,7 +16,7 @@ export default function AddCategory() {
       };
         e.preventDefault();
 
-        axios.post('https://vendor-management-system-2.onrender.com/createBank', {bankName:Bankname,
+        axios.post('https://vendobackend-2.onrender.com/createBank', {bankName:Bankname,
         emergencyContactNo:EmergencyContactNo,
         email:email
       

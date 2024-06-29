@@ -10,7 +10,7 @@ export default function Category() {
 
   useEffect(()=>
   {
-    axios.get('https://vendor-management-system-2.onrender.com/getAllBanks')
+    axios.get('https://vendobackend-2.onrender.com/getAllBanks')
 
       .then(result=>{
         console.log(result)
