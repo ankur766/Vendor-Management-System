@@ -103,7 +103,15 @@ app.delete("/users/:id", async (req, res) => {
 
 
 
-
+app.get('/api/total-salary', async (req, res) => {
+  try {
+    const totalSalary = await getTotalSalary();
+    res.json({ totalSalary });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the total salary.' });
+  }
+});
+  
 
 //******************************Bank   BankAPI code******************************
 
@@ -184,7 +192,7 @@ app.delete("/deleteBank/:bankID", async (req, res) => {
 
 
 // Default route
-app.get("/", (req, res) => {
+app.get("/admin", (req, res) => {
     res.send("Hello");
 });
 

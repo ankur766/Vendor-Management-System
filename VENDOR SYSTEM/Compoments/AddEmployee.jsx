@@ -6,6 +6,7 @@ export default function AddEmployee() {
   const [bankAccountNo, setBankAccountNo] = useState();
   const [bankEmail, setbankEmail] = useState();
   const [bankName, setBankName] = useState();
+  const [salary, setsalary] = useState();
   const [addressLine1, setAddressLine1] = useState();
   const [addressLine2, setAddressLine2] = useState();
   const [city, setCity] = useState();
@@ -39,6 +40,7 @@ export default function AddEmployee() {
       bank_account_no:bankAccountNo,
       bank_name:bankName,
       vendor_email:bankEmail,
+      vendor_salry:salary,
       address_line1:addressLine1,
       address_line2:addressLine2,
       city:city,
@@ -91,6 +93,11 @@ export default function AddEmployee() {
           </select>
 
 
+        </div>
+        <div class="col-12">
+          <label for="inputPassword4" class="form-label">Salary</label>
+          <input type="number" value={salary} class="form-control" id="salary" placeholder='salary' onChange={(e) => setsalary(e.target.value)}
+          />
         </div>
         <div class="col-12">
           <label for="inputPassword4" class="form-label">Address 1</label>
